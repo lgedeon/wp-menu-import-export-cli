@@ -134,7 +134,7 @@ class Menu_Command extends WP_CLI_Command {
 					$item_array['menu-item-object-id'] = $term->term_id;
 					$item_array['menu-item-title'] = ( $item_array['menu-item-title'] ) ?: $term->name;
 				} elseif ( isset( $item->url ) ) {
-					$item_array['menu-item-url']   = ( 'http' == substr( $item->url, 0, 4 ) ) ? esc_url( $item->url ) : home_url( $item->url );
+					$item_array['menu-item-url']   = $item->url;
 					$item_array['menu-item-title'] = ( $item_array['menu-item-title'] ) ?: $item->url;
 				} else {
 					continue;
