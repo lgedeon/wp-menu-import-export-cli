@@ -116,9 +116,9 @@ class Menu_Command extends WP_CLI_Command {
 					'menu-item-status' => 'publish'
 				);
 
-				if ( isset( $item->page ) && $page = get_page_by_path( $item->page ) ) { // @todo support lookup by title
+				if ( isset( $item->page ) && $page = get_page_by_path( $item->page, OBJECT, $item->object ) ) { // @todo support lookup by title
 					$item_array['menu-item-type']      = 'post_type';
-					$item_array['menu-item-object']    = 'page';
+					$item_array['menu-item-object']    = $item->object;
 					$item_array['menu-item-object-id'] = $page->ID;
 					$item_array['menu-item-title']     = ( $item_array['menu-item-title'] ) ?: $page->post_title;
 				} elseif ( isset ( $item->taxonomy ) && isset( $item->term ) && $term = get_term_by( 'name', $item->term, $item->taxonomy ) ) {
@@ -239,10 +239,9 @@ class Menu_Command extends WP_CLI_Command {
 						$export_item['url'] = $item->url;
 						break;
 					case 'post_type':
-						if ( 'page' == $item->object ) {
-							$page = get_post( $item->object_id );
-							$export_item['page'] = $page->post_name;
-						}
+						$page = get_post( $item->object_id );
+						$export_item['page'] = $page->post_name;
+						$export_item['object'] = $item->object;
 						break;
 					case 'taxonomy':
 						$term = get_term( $item->object_id, $item->object );
