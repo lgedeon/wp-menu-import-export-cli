@@ -96,17 +96,10 @@ class Menu_Command extends WP_CLI_Command {
 			if ( isset( $menu->location ) && isset( $locations[ $menu->location ] ) ) :
 				$menu_id = $locations[ $menu->location ];
 			elseif ( isset( $menu->name ) ) :
-				// If we can't find a menu by this name, create one.
 				if ( $menu_object = wp_get_nav_menu_object( $menu->name ) ) :
-					$menu_id = $menu_object->term_id;
-				else :
-					$menu_object = wp_create_nav_menu( $menu->name );
-					if ( isset( $menu_object->term_id ) ) {
-						$menu_id = $menu_object->term_id;
-					} else {
-						continue;
-					}
+					wp_delete_nav_menu($menu->name);
 				endif;
+				$menu_id = wp_create_nav_menu( $menu->name );
 			else : // if no location or name is supplied, we have nowhere to put any additional info in this object.
 				continue;
 			endif;
